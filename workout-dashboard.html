@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>John's 120-Day Transformation Dashboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=Barlow:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg: #0a0c10;
+    --bg2: #0f1218;
+    --bg3: #151b24;
+    --card: #1a2030;
+    --card2: #1f2840;
+    --border: #2a3550;
+    --border2: #354060;
+    --text: #e8edf5;
+    --text2: #8a99b8;
+    --text3: #5a6a88;
+    --football: #00e5ff;
+    --gym: #7c4dff;
+    --run: #00e676;
+    --rest: #37474f;
+    --accent: #ff6d00;
+    --warn: #ffd740;
+    --danger: #ff5252;
+    --foundation: #00bcd4;
+    --building: #7c4dff;
+    --burning: #ff6d00;
+    --push: #ff5252;
+    --glow-football: 0 0 20px rgba(0,229,255,0.3);
+    --glow-gym: 0 0 20px rgba(124,77,255,0.3);
+    --glow-run: 0 0 20px rgba(0,230,118,0.3);
+    --glow-accent: 0 0 20px rgba(255,109,0,0.3);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(0,229,255,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(124,77,255,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(255,109,0,0.02) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-wrapper { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 0 16px 80px; }
+
+  /* ===== HEADER ===== */
+  .header {
+    padding: 32px 0 24px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
+  }
+
+  .header-left {}
+
+  .header-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .header-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 0.9;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #e8edf5 0%, #8a99b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header-title span {
+    background: linear-gradient(135deg, var(--accent) 0%, #ff9e40 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .stat-pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    padding: 8px 18px;
+    text-align: center;
+  }
+
+  .stat-pill-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--text3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .stat-pill-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  /* ===== NAV TABS ===== */
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 32px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 4px;
+    overflow-x: auto;
+  }
+
+  .nav-tab {
+    flex: 1;
+    min-width: 120px;
+    padding: 10px 16px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: var(--text2);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .nav-tab:hover { color: var(--text); background: var(--card); }
+
+  .nav-tab.active {
+    background: var(--card2);
+    color: var(--accent);
+    box-shadow: var(--glow-accent);
+  }
+
+  /* ===== PANELS ===== */
+  .panel { display: none; animation: fadeIn 0.3s ease; }
+  .panel.active { display: block; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ===== LEGEND ===== */
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    padding: 14px 20px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text2); }
+
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .legend-dot.football { background: var(--football); box-shadow: 0 0 8px var(--football); }
+  .legend-dot.gym { background: var(--gym); box-shadow: 0 0 8px var(--gym); }
+  .legend-dot.run { background: var(--run); box-shadow: 0 0 8px var(--run); }
+  .legend-dot.rest { background: var(--rest); }
+
+  /* ===== PHASE BANNER ===== */
+  .phase-banners {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .phase-banner {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    text-align: center;
+    cursor: default;
+  }
+
+  .phase-banner.foundation { background: rgba(0,188,212,0.1); border-color: rgba(0,188,212,0.3); }
+  .phase-banner.building { background: rgba(124,77,255,0.1); border-color: rgba(124,77,255,0.3); }
+  .phase-banner.burning { background: rgba(255,109,0,0.1); border-color: rgba(255,109,0,0.3); }
+  .phase-banner.push { background: rgba(255,82,82,0.1); border-color: rgba(255,82,82,0.3); }
+
+  .phase-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .phase-banner.foundation .phase-name { color: var(--foundation); }
+  .phase-banner.building .phase-name { color: var(--building); }
+  .phase-banner.burning .phase-name { color: var(--burning); }
+  .phase-banner.push .phase-name { color: var(--push); }
+
+  .phase-weeks { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+  /* ===== WEEK GRID ===== */
+  .weeks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+  }
+
+  .week-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .week-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+
+  .week-card.foundation { border-top: 2px solid var(--foundation); }
+  .week-card.building { border-top: 2px solid var(--building); }
+  .week-card.burning { border-top: 2px solid var(--burning); }
+  .week-card.push { border-top: 2px solid var(--push); }
+
+  .week-header {
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .week-number {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+  }
+
+  .week-phase-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .foundation .week-phase-badge { background: rgba(0,188,212,0.15); color: var(--foundation); }
+  .building .week-phase-badge { background: rgba(124,77,255,0.15); color: var(--building); }
+  .burning .week-phase-badge { background: rgba(255,109,0,0.15); color: var(--burning); }
+  .push .week-phase-badge { background: rgba(255,82,82,0.15); color: var(--push); }
+
+  .week-days {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+
+  .day-slot {
+    padding: 10px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+
+  .day-slot:last-child { border-right: none; }
+
+  .day-slot:hover { background: var(--bg2); }
+
+  .day-slot.football-slot { border-bottom: 2px solid var(--football); }
+  .day-slot.gym-slot { border-bottom: 2px solid var(--gym); }
+  .day-slot.run-slot { border-bottom: 2px solid var(--run); }
+
+  .day-slot-icon { font-size: 20px; display: block; margin-bottom: 3px; }
+
+  .day-slot-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .day-slot.football-slot .day-slot-label { color: var(--football); }
+  .day-slot.gym-slot .day-slot-label { color: var(--gym); }
+  .day-slot.run-slot .day-slot-label { color: var(--run); }
+
+  .foot-flag {
+    position: absolute;
+    top: 4px; right: 4px;
+    font-size: 8px;
+    width: 14px; height: 14px;
+    background: var(--warn);
+    color: #000;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    cursor: help;
+  }
+
+  .week-motivation {
+    padding: 10px 16px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text3);
+    font-style: italic;
+    line-height: 1.4;
+  }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 560px;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: slideUp 0.25s ease;
+  }
+
+  @keyframes slideUp { from { opacity: 0; transform: translateY(24px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+  .modal-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: sticky;
+    top: 0;
+    background: var(--bg3);
+    z-index: 1;
+  }
+
+  .modal-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1;
+  }
+
+  .modal-subtitle { font-size: 13px; color: var(--text2); margin-top: 4px; }
+
+  .modal-close {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text2);
+    cursor: pointer;
+    padding: 6px 10px;
+    font-size: 16px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    margin-left: 12px;
+  }
+
+  .modal-close:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+
+  .modal-body { padding: 20px 24px; }
+
+  .session-section { margin-bottom: 20px; }
+
+  .session-section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .exercise-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 8px 16px;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .exercise-row:last-child { border-bottom: none; }
+
+  .exercise-name { font-weight: 500; font-size: 14px; }
+  .exercise-name small { display: block; font-size: 11px; color: var(--text3); font-weight: 400; margin-top: 1px; }
+
+  .exercise-sets {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--gym);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .exercise-rest {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .tip-box {
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-top: 12px;
+  }
+
+  .tip-box.recovery { background: rgba(0,230,118,0.08); border-left: 3px solid var(--run); color: var(--text2); }
+  .tip-box.energy { background: rgba(255,215,64,0.08); border-left: 3px solid var(--warn); color: var(--text2); }
+  .tip-box.swap { background: rgba(0,229,255,0.08); border-left: 3px solid var(--football); color: var(--text2); }
+
+  .tip-box strong { color: var(--text); }
+
+  .busy-week-box {
+    background: rgba(255,109,0,0.08);
+    border: 1px solid rgba(255,109,0,0.2);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.5;
+    margin-top: 12px;
+  }
+
+  .busy-week-box strong { color: var(--accent); }
+
+  /* ===== PROGRESS CHART ===== */
+  .progress-section { margin-bottom: 32px; }
+
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .chart-container {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .chart-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .chart-legend { display: flex; gap: 16px; }
+
+  .chart-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); }
+
+  .chart-legend-line { width: 20px; height: 2px; border-radius: 1px; }
+
+  svg.weight-chart { width: 100%; height: 260px; overflow: visible; }
+
+  .weight-input-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+
+  .weight-input-group { display: flex; flex-direction: column; gap: 4px; }
+  .weight-input-group label { font-size: 11px; color: var(--text3); font-family: 'Space Mono', monospace; letter-spacing: 1px; text-transform: uppercase; }
+
+  .weight-input-group input, .weight-input-group select {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: 'Barlow', sans-serif;
+    width: 120px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .weight-input-group input:focus, .weight-input-group select:focus { border-color: var(--accent); }
+
+  .btn {
+    padding: 9px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.15s;
+  }
+
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #ff8c00; transform: translateY(-1px); }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--text2);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ===== MOTIVATION CARDS ===== */
+  .motivation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .motivation-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    transition: transform 0.2s;
+  }
+
+  .motivation-card:hover { transform: translateY(-2px); }
+
+  .motivation-icon { font-size: 28px; margin-bottom: 8px; }
+
+  .motivation-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    color: var(--accent);
+  }
+
+  .motivation-text { font-size: 13px; color: var(--text2); line-height: 1.5; }
+
+  /* ===== BADGES ===== */
+  .badges-section { margin-bottom: 32px; }
+
+  .badges-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-align: center;
+    min-width: 100px;
+    transition: all 0.2s;
+  }
+
+  .badge.earned {
+    border-color: var(--accent);
+    background: rgba(255,109,0,0.08);
+    box-shadow: var(--glow-accent);
+  }
+
+  .badge.locked { opacity: 0.4; }
+
+  .badge-icon { font-size: 28px; }
+
+  .badge-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text2);
+  }
+
+  .badge.earned .badge-name { color: var(--accent); }
+
+  /* ===== STREAK ===== */
+  .streak-bar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .streak-flame { font-size: 40px; }
+
+  .streak-info { flex: 1; }
+
+  .streak-number {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .streak-label { font-size: 13px; color: var(--text2); }
+
+  .streak-dots {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    max-width: 320px;
+  }
+
+  .streak-dot {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .streak-dot.done { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 6px var(--accent); }
+  .streak-dot.today { border-color: var(--accent); animation: pulse 1.5s infinite; }
+
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,109,0,0.4); } 50% { box-shadow: 0 0 0 6px rgba(255,109,0,0); } }
+
+  /* ===== RECOVERY PANEL ===== */
+  .recovery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .recovery-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .recovery-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .recovery-card-icon { font-size: 24px; }
+
+  .recovery-card-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .recovery-list { list-style: none; }
+
+  .recovery-list li {
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13px;
+    color: var(--text2);
+    display: flex;
+    gap: 8px;
+    line-height: 1.4;
+  }
+
+  .recovery-list li::before { content: '→'; color: var(--accent); flex-shrink: 0; }
+  .recovery-list li:last-child { border-bottom: none; }
+
+  .energy-timeline {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+
+  .timeline-row {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 16px;
+    align-items: start;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .timeline-row:last-child { border-bottom: none; }
+
+  .timeline-time {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .timeline-desc { font-size: 13px; color: var(--text2); line-height: 1.5; }
+  .timeline-desc strong { color: var(--text); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .header { grid-template-columns: 1fr; }
+    .phase-banners { grid-template-columns: repeat(2, 1fr); }
+    .weeks-grid { grid-template-columns: 1fr; }
+    .nav-tab { font-size: 12px; padding: 8px 10px; min-width: 90px; }
+    .streak-bar { flex-direction: column; align-items: flex-start; }
+  }
+
+  @media (max-width: 480px) {
+    .header-stats { gap: 12px; }
+    .stat-pill { padding: 6px 12px; }
+    .stat-pill-value { font-size: 18px; }
+    .phase-banners { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* Tooltip */
+  [data-tooltip] { position: relative; }
+  [data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--card2);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 11px;
+    color: var(--text);
+    white-space: nowrap;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .progress-bar-track {
+    background: var(--bg2);
+    border-radius: 100px;
+    height: 8px;
+    overflow: hidden;
+    margin: 8px 0;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, var(--accent), #ff9e40);
+    transition: width 1s ease;
+  }
+
+  .overall-progress-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+
+  .overall-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 4px;
+  }
+
+  .overall-progress-label span:last-child {
+    font-family: 'Space Mono', monospace;
+    color: var(--accent);
+  }
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <div class="header-eyebrow">120-Day Transformation Program</div>
+      <h1 class="header-title">JOHN'S <span>MISSION</span><br>CONTROL</h1>
+    </div>
+    <div class="header-stats">
+      <div class="stat-pill">
+        <div class="stat-pill-label">Start</div>
+        <div class="stat-pill-value">97kg</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-pill-label">Target</div>
+        <div class="stat-pill-value">80kg</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-pill-label">Days</div>
+        <div class="stat-pill-value">120</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-pill-label">To Lose</div>
+        <div class="stat-pill-value">17kg</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="showPanel('plan')">📅 120-Day Plan</button>
+    <button class="nav-tab" onclick="showPanel('progress')">📈 Progress</button>
+    <button class="nav-tab" onclick="showPanel('motivation')">🔥 Motivation</button>
+    <button class="nav-tab" onclick="showPanel('recovery')">⚡ Energy & Recovery</button>
+  </nav>
+
+  <!-- ===================== PLAN PANEL ===================== -->
+  <div id="panel-plan" class="panel active">
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot football"></div> Football (Mon)</div>
+      <div class="legend-item"><div class="legend-dot gym"></div> Gym Session (30 min)</div>
+      <div class="legend-item"><div class="legend-dot run"></div> Run / Active (Weekend)</div>
+      <div class="legend-item"><span style="font-size:13px">🔄</span> Foot swap available</div>
+      <div class="legend-item"><span style="font-size:13px">💼</span> Busy week mode</div>
+    </div>
+
+    <div class="phase-banners">
+      <div class="phase-banner foundation">
+        <div class="phase-name">Foundation</div>
+        <div class="phase-weeks">Weeks 1–4 · Days 1–28</div>
+      </div>
+      <div class="phase-banner building">
+        <div class="phase-name">Building</div>
+        <div class="phase-weeks">Weeks 5–9 · Days 29–63</div>
+      </div>
+      <div class="phase-banner burning">
+        <div class="phase-name">Burning</div>
+        <div class="phase-weeks">Weeks 10–14 · Days 64–98</div>
+      </div>
+      <div class="phase-banner push">
+        <div class="phase-name">Final Push</div>
+        <div class="phase-weeks">Weeks 15–17 · Days 99–120</div>
+      </div>
+    </div>
+
+    <div class="weeks-grid" id="weeksGrid"></div>
+  </div>
+
+  <!-- ===================== PROGRESS PANEL ===================== -->
+  <div id="panel-progress" class="panel">
+
+    <div class="overall-progress-card">
+      <div class="overall-progress-label">
+        <span>Journey to 80kg</span>
+        <span id="progressPct">0%</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:4px;">
+        <span>97kg — Start</span>
+        <span id="currentWeightDisplay">Current: 97kg</span>
+        <span>80kg — Goal 🎯</span>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <div class="chart-header">
+        <div class="chart-title">Weight Tracking Chart</div>
+        <div class="chart-legend">
+          <div class="chart-legend-item"><div class="chart-legend-line" style="background:var(--accent)"></div> Actual</div>
+          <div class="chart-legend-item"><div class="chart-legend-line" style="background:var(--text3);border-top:1px dashed var(--text3)"></div> Target</div>
+        </div>
+      </div>
+      <svg class="weight-chart" id="weightChart" viewBox="0 0 800 260"></svg>
+
+      <div class="weight-input-row">
+        <div class="weight-input-group">
+          <label>Week</label>
+          <select id="weightWeek">
+            <option value="0">Week 0 (start)</option>
+          </select>
+        </div>
+        <div class="weight-input-group">
+          <label>Weight (kg)</label>
+          <input type="number" id="weightValue" placeholder="e.g. 95.5" min="70" max="110" step="0.1">
+        </div>
+        <div style="display:flex;align-items:flex-end;">
+          <button class="btn btn-primary" onclick="logWeight()">Log Weight</button>
+        </div>
+        <div style="display:flex;align-items:flex-end;">
+          <button class="btn btn-ghost" onclick="resetWeights()">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Weekly Milestones</div>
+    <div id="milestonesGrid" class="motivation-grid"></div>
+
+  </div>
+
+  <!-- ===================== MOTIVATION PANEL ===================== -->
+  <div id="panel-motivation" class="panel">
+
+    <div class="streak-bar">
+      <div class="streak-flame">🔥</div>
+      <div class="streak-info">
+        <div class="streak-number" id="streakNum">0</div>
+        <div class="streak-label">Session Streak — keep the fire burning!</div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:6px;font-family:'Space Mono',monospace;letter-spacing:1px;">LAST 28 SESSIONS</div>
+        <div class="streak-dots" id="streakDots"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Phase Badges</div>
+    <div class="badges-section">
+      <div class="badges-grid" id="badgesGrid"></div>
+    </div>
+
+    <div class="section-title">Why You're Doing This</div>
+    <div class="motivation-grid">
+      <div class="motivation-card">
+        <div class="motivation-icon">⚽</div>
+        <div class="motivation-title">More on the Pitch</div>
+        <div class="motivation-text">Every training session adds stamina. By Week 8 you'll be covering more ground on Mondays — Leo and Eli will notice how much faster you move.</div>
+      </div>
+      <div class="motivation-card">
+        <div class="motivation-icon">👦👦</div>
+        <div class="motivation-title">Keep Up with the Kids</div>
+        <div class="motivation-text">17kg gone means you're carrying two bags of shopping less every time you sprint after them. Weekend energy will feel like a different person by Day 60.</div>
+      </div>
+      <div class="motivation-card">
+        <div class="motivation-icon">😴</div>
+        <div class="motivation-title">Sleep Like a Log</div>
+        <div class="motivation-text">Regular moderate exercise is the #1 evidence-based sleep improver. Gym sessions 2–3x a week will have you sleeping deeper within 3 weeks.</div>
+      </div>
+      <div class="motivation-card">
+        <div class="motivation-icon">💡</div>
+        <div class="motivation-title">Work Energy Up</div>
+        <div class="motivation-text">Morning and lunchtime sessions keep cortisol in check. By Phase 2 you'll find stress sits lighter and afternoon focus sharpens considerably.</div>
+      </div>
+      <div class="motivation-card">
+        <div class="motivation-icon">👕</div>
+        <div class="motivation-title">The Fit Test</div>
+        <div class="motivation-text">At -5kg shirts sit differently. At -10kg you'll notice it every morning getting dressed. At -17kg you'll need a new wardrobe — the best problem to have.</div>
+      </div>
+      <div class="motivation-card">
+        <div class="motivation-icon">❤️</div>
+        <div class="motivation-title">Heart Health</div>
+        <div class="motivation-text">Your resting heart rate will likely drop 5–10bpm in 60 days. Blood pressure improves. You're building decades, not just kilos.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Phase Motivators</div>
+    <div id="phaseMotivators"></div>
+
+  </div>
+
+  <!-- ===================== RECOVERY PANEL ===================== -->
+  <div id="panel-recovery" class="panel">
+
+    <div class="section-title">Energy Strategy</div>
+
+    <div class="energy-timeline">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;color:var(--warn);">⚡ Your Daily Energy Blueprint</div>
+      <div class="timeline-row">
+        <div class="timeline-time">6:30–7:30am</div>
+        <div class="timeline-desc"><strong>Best gym window.</strong> Cortisol naturally peaks — you'll lift more, burn more, and it won't steal evening energy. Even 2–3 days/week of this changes everything.</div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-time">Breakfast</div>
+        <div class="timeline-desc"><strong>Protein + slow carbs.</strong> Eggs + oats or Greek yogurt + banana. Skipping breakfast tanks afternoon energy and triggers evening overeating.</div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-time">12:00–1:00pm</div>
+        <div class="timeline-desc"><strong>Lunch gym option</strong> if mornings don't work. Keeps evenings free for the kids. Eat 90 mins before — chicken + rice, not a heavy meal.</div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-time">3:00–4:00pm</div>
+        <div class="timeline-desc"><strong>Energy dip window.</strong> Don't fight it with caffeine — a 10-min walk or 5-min stretching break resets you better than coffee after 2pm.</div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-time">Evening</div>
+        <div class="timeline-desc"><strong>Protect this time.</strong> No high-intensity work after 7pm — it delays sleep. Light stretching (10 min) is allowed and actually helps recovery.</div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-time">9:30pm</div>
+        <div class="timeline-desc"><strong>Sleep prep.</strong> Phone down. Blue light off. Protein snack (cottage cheese, casein shake) feeds overnight muscle repair. Aim for 7–8 hours.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Recovery by Session Type</div>
+    <div class="recovery-grid">
+      <div class="recovery-card" style="border-top:2px solid var(--football)">
+        <div class="recovery-card-header">
+          <div class="recovery-card-icon">⚽</div>
+          <div class="recovery-card-title" style="color:var(--football)">After Football</div>
+        </div>
+        <ul class="recovery-list">
+          <li>Within 30 min: protein + carbs (banana + protein shake, or chicken wrap)</li>
+          <li>Ice calves and ankles if tender — 10 min each side</li>
+          <li>Light walk Tuesday if legs are heavy — don't sit all day</li>
+          <li>Foam roll quads and hamstrings Monday night, 5–8 mins</li>
+          <li>Epsom salt bath if seriously sore — genuinely helps</li>
+          <li>Tuesday gym: upper body only to let legs recover</li>
+        </ul>
+      </div>
+      <div class="recovery-card" style="border-top:2px solid var(--gym)">
+        <div class="recovery-card-header">
+          <div class="recovery-card-icon">🏋️</div>
+          <div class="recovery-card-title" style="color:var(--gym)">After Gym</div>
+        </div>
+        <ul class="recovery-list">
+          <li>2-min machine stretch before leaving — don't skip this</li>
+          <li>Protein within 45 mins — 25–30g is the sweet spot</li>
+          <li>DOMS peaks Day 2 — movement (not rest) is the cure</li>
+          <li>Contrast shower: 1 min warm, 30 sec cold, repeat x3</li>
+          <li>Magnesium glycinate at night (200mg) — reduces soreness</li>
+          <li>Sleep 7+ hrs — that's when the actual muscle building happens</li>
+        </ul>
+      </div>
+      <div class="recovery-card" style="border-top:2px solid var(--run)">
+        <div class="recovery-card-header">
+          <div class="recovery-card-icon">🏃</div>
+          <div class="recovery-card-title" style="color:var(--run)">After Run / Active</div>
+        </div>
+        <ul class="recovery-list">
+          <li>5-min walk cooldown — never stop dead from running</li>
+          <li>Calf raises on stairs for 2 min post-run to help foot recovery</li>
+          <li>Roll the plantar fascia with a golf ball (2 min each foot)</li>
+          <li>Elevate feet 15 mins if any swelling in the foot</li>
+          <li>Hydrate: at least 500ml water within 30 mins post-run</li>
+          <li>Monday rest day from running after weekend run</li>
+        </ul>
+      </div>
+      <div class="recovery-card" style="border-top:2px solid var(--warn)">
+        <div class="recovery-card-header">
+          <div class="recovery-card-icon">🦶</div>
+          <div class="recovery-card-title" style="color:var(--warn)">Foot Flare-Up Protocol</div>
+        </div>
+        <ul class="recovery-list">
+          <li><strong>Stop immediately</strong> if sharp pain — don't push through foot pain</li>
+          <li>Swap run for: cycling (30 min), swimming (20 min), or 40-min brisk walk</li>
+          <li>Ice 15 min on the affected area, twice that day</li>
+          <li>Ibuprofen gel topically (not oral unless needed)</li>
+          <li>Avoid standing barefoot on hard floors — cushioned shoes all day</li>
+          <li>3 consecutive flare-ups: see a physio — don't just manage it</li>
+        </ul>
+      </div>
+      <div class="recovery-card" style="border-top:2px solid var(--text3)">
+        <div class="recovery-card-header">
+          <div class="recovery-card-icon">🧠</div>
+          <div class="recovery-card-title">Work Stress Management</div>
+        </div>
+        <ul class="recovery-list">
+          <li>Exercise IS a stress reliever — don't skip it on hard days, modify it</li>
+          <li>High stress = high cortisol = fat retention around the middle</li>
+          <li>5-min box breathing before evening gym: 4 in, 4 hold, 4 out, 4 hold</li>
+          <li>Treat your 30-min gym slot as a protected meeting in your diary</li>
+          <li>Busy week? Do the "Minimum Effective Dose" version (see each session card)</li>
+          <li>Missing one session never mattered. Missing a week is where habits break.</li>
+        </ul>
+      </div>
+      <div class="recovery-card" style="border-top:2px solid var(--accent)">
+        <div class="recovery-card-header">
+          <div class="recovery-card-icon">🥗</div>
+          <div class="recovery-card-title" style="color:var(--accent)">Nutrition Basics</div>
+        </div>
+        <ul class="recovery-list">
+          <li>Target: ~1,800–2,000 kcal/day on rest days, ~2,100 on training days</li>
+          <li>Protein: 140–160g/day — this protects muscle while in a deficit</li>
+          <li>Don't skip meals — energy crashes will kill evening motivation</li>
+          <li>Evening meal: protein + veg + small carbs. Not too heavy.</li>
+          <li>Alcohol: 2 units max on Fridays/Saturdays — it blocks fat burning for 24–36hrs</li>
+          <li>Hydration: 2.5L water minimum on training days</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ===================== SESSION MODAL ===================== -->
+<div class="modal-overlay" id="sessionModal" onclick="closeModalOnOverlay(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modalTitle">Session Details</div>
+        <div class="modal-subtitle" id="modalSubtitle"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+// ===================================================================
+// DATA
+// ===================================================================
+
+const PHASES = [
+  { name: 'Foundation', cls: 'foundation', weeks: [1,2,3,4], color: '#00bcd4' },
+  { name: 'Building',   cls: 'building',   weeks: [5,6,7,8,9], color: '#7c4dff' },
+  { name: 'Burning',    cls: 'burning',    weeks: [10,11,12,13,14], color: '#ff6d00' },
+  { name: 'Final Push', cls: 'push',       weeks: [15,16,17], color: '#ff5252' },
+];
+
+function getPhase(week) {
+  return PHASES.find(p => p.weeks.includes(week)) || PHASES[0];
+}
+
+const WEEK_MOTIVATIONS = [
+  "Week 1: Every expert was once a beginner. Show up.",
+  "Week 2: Your body is adapting — trust the process.",
+  "Week 3: Habits form around Day 21. You're nearly there.",
+  "Week 4: Foundation complete — you've built something real.",
+  "Week 5: Time to push. Leo and Eli are watching.",
+  "Week 6: You're burning more than fat — you're burning excuses.",
+  "Week 7: Halfway through Building phase. Notice the difference?",
+  "Week 8: 2 months in. How do the stairs feel now?",
+  "Week 9: Building phase done. You're a different athlete.",
+  "Week 10: Burning phase — this is where bodies change visibly.",
+  "Week 11: Keep the fire stoked. Don't negotiate with rest days.",
+  "Week 12: 84 days of showing up. The kids can see it.",
+  "Week 13: Three months down. 80kg is within sight.",
+  "Week 14: Almost there. One final push between you and the goal.",
+  "Week 15: Final Push begins. This is where legends are made.",
+  "Week 16: 112 days of commitment. One more week.",
+  "Week 17: Last week. Finish what you started.",
+];
+
+// Gym sessions: upper/lower split alternating
+const GYM_SESSIONS = {
+  upper: {
+    label: 'GYM — Upper',
+    icon: '💪',
+    warmup: '5 min light cardio on bike/cross trainer + arm circles',
+    cooldown: '5 min stretching: chest doorframe stretch, lat pulldown stretch, shoulder cross-body stretch',
+    exercises: [
+      { name: 'Chest Press Machine', note: 'Adjust seat so handles align with mid-chest', sets: '3 sets', reps: '', rest: '60s' },
+      { name: 'Seated Cable Row', note: 'Keep chest tall, squeeze shoulder blades', sets: '3 sets', reps: '', rest: '60s' },
+      { name: 'Shoulder Press Machine', note: 'Control the lowering phase', sets: '3 sets', reps: '', rest: '60s' },
+      { name: 'Lat Pulldown', note: 'Wide grip, pull to upper chest', sets: '3 sets', reps: '', rest: '60s' },
+      { name: 'Cable Bicep Curl', note: 'Stand tall, elbows fixed at sides', sets: '2 sets', reps: '', rest: '45s' },
+      { name: 'Tricep Pushdown', note: 'Cable machine, rope attachment', sets: '2 sets', reps: '', rest: '45s' },
+    ],
+    repsByPhase: ['foundation', 'building', 'burning', 'push'],
+  },
+  lower: {
+    label: 'GYM — Lower',
+    icon: '🦵',
+    warmup: '5 min bike + 10x bodyweight squats to warm knees and hips',
+    cooldown: '5 min stretching: seated hamstring stretch, lying glute stretch, calf stretch on step',
+    exercises: [
+      { name: 'Leg Press Machine', note: 'Feet hip-width, don\'t lock knees at top', sets: '3 sets', reps: '', rest: '75s' },
+      { name: 'Leg Curl (Lying or Seated)', note: 'Controlled, full range of motion', sets: '3 sets', reps: '', rest: '60s' },
+      { name: 'Leg Extension', note: 'Pause 1 second at top', sets: '3 sets', reps: '', rest: '60s' },
+      { name: 'Seated Calf Raise', note: 'Full range — stretch at bottom counts', sets: '3 sets', reps: '', rest: '45s' },
+      { name: 'Hip Abduction Machine', note: 'Good for hip stability and knee tracking', sets: '2 sets', reps: '', rest: '45s' },
+      { name: 'Cable Woodchop (low-to-high)', note: 'Core rotation — keep feet planted', sets: '2 sets', reps: '', rest: '45s' },
+    ],
+  },
+};
+
+// Reps/intensity by phase
+function getIntensity(phase, sessionType) {
+  const configs = {
+    foundation: { reps: '12–15 reps', intensity: 'Light–moderate weight. Form > everything.', duration: '20 min' },
+    building:   { reps: '10–12 reps', intensity: 'Moderate weight, controlled tempo.', duration: '25 min' },
+    burning:    { reps: '8–10 reps', intensity: 'Heavier weight, 2-sec lowering phase.', duration: '28 min' },
+    push:       { reps: '6–8 reps (heavy) + 12 drop set', intensity: 'Challenge yourself every set.', duration: '30 min' },
+  };
+  return configs[phase] || configs.foundation;
+}
+
+const RUN_SESSIONS = {
+  foundation: {
+    type: 'Run', label: '20 min Easy Run',
+    desc: 'Conversational pace — you should be able to speak in sentences. 5-min walk warm-up, 20-min run, 5-min walk cooldown.',
+    swapDesc: '30 min easy cycling (stationary or road) or 40 min brisk walk. Heart rate target: 100–120bpm.',
+    route: 'Flat route preferred — avoid hills to protect foot.'
+  },
+  building: {
+    type: 'Run', label: '25 min Steady Run',
+    desc: '25-min continuous run at steady pace. Include 2 × 3-min efforts at slightly harder effort (RPE 7/10). 5-min walk each end.',
+    swapDesc: '35 min cycling with 2 × 3-min faster intervals, or 25 min swim.',
+    route: 'Gentle terrain. Avoid concrete where possible — grass or tarmac path preferred.'
+  },
+  burning: {
+    type: 'Run', label: '30 min Run with Intervals',
+    desc: '5-min walk, 20-min run including 4 × 2-min hard efforts (RPE 8) with 90-sec jog recovery, 5-min walk finish.',
+    swapDesc: '30 min bike intervals: 2-min hard / 2-min easy × 6, or 30 min swim.',
+    route: 'Any terrain. Foam roll calves and use a golf ball on the foot post-run.'
+  },
+  push: {
+    type: 'Run', label: '30 min Tempo / Intervals',
+    desc: '5-min walk, 5-min easy, 15-min at tempo pace (comfortably hard — you can say single words), 5-min easy, 5-min walk.',
+    swapDesc: '30 min high-resistance cycling tempo, or 30 min swim with hard lengths.',
+    route: 'Race pace practice. Maximum benefit session.'
+  },
+};
+
+const FOOTBALL_SESSION = {
+  label: 'Football Training',
+  icon: '⚽',
+  warmup: 'Arrive 10 mins early: dynamic warm-up — leg swings, high knees, lateral shuffles',
+  cooldown: 'Static quad and hamstring stretches post-session × 3 min each',
+  tips: [
+    'Hydrate: 500ml water before, 500ml during',
+    'Eat 90 mins before — carbs + light protein (banana + peanut butter on toast)',
+    'Wear good boots with ankle support — protect that foot',
+    'If foot gets sore during session, tape it or consider stopping early — it\'s not worth aggravating it',
+    'Post-session protein within 30 mins'
+  ]
+};
+
+const BUSY_WEEK_MINS = {
+  foundation: { gym: '15 min — leg press 2×15, chest press 2×15, cable row 2×15. Done.', run: '20 min walk at brisk pace.' },
+  building:   { gym: '15 min — 3 compound machines only, 2 sets each at moderate weight.', run: '25 min easy jog or 30 min walk.' },
+  burning:    { gym: '20 min — leg press, chest press, row. 3 sets each, slightly heavier.', run: '20 min jog with 2 hard minutes in the middle.' },
+  push:       { gym: '20 min — push hard on just 3 machines. Full effort, fewer exercises.', run: '25 min — maintain as much intensity as possible. This phase matters.' },
+};
+
+// ===================================================================
+// BUILD WEEK CARDS
+// ===================================================================
+
+function buildWeeks() {
+  const grid = document.getElementById('weeksGrid');
+  grid.innerHTML = '';
+
+  for (let w = 1; w <= 17; w++) {
+    const phase = getPhase(w);
+    const gymType = (w % 2 === 1) ? ['upper', 'lower'] : ['lower', 'upper'];
+    const runPhase = w <= 4 ? 'foundation' : w <= 9 ? 'building' : w <= 14 ? 'burning' : 'push';
+    const motiv = WEEK_MOTIVATIONS[w - 1] || '';
+    const startDay = (w - 1) * 7 + 1;
+    const endDay = Math.min(w * 7, 120);
+
+    const card = document.createElement('div');
+    card.className = `week-card ${phase.cls}`;
+    card.innerHTML = `
+      <div class="week-header">
+        <div class="week-number">
+          WEEK ${w}
+          <span style="font-size:12px;color:var(--text3);font-family:'Space Mono',monospace;margin-left:8px;">Day ${startDay}–${endDay}</span>
+        </div>
+        <span class="week-phase-badge">${phase.name}</span>
+      </div>
+      <div class="week-days">
+        <div class="day-slot football-slot" onclick="openModal('football', ${w})" data-tooltip="Click for session details">
+          <span class="day-slot-icon">⚽</span>
+          <div class="day-slot-label">Football</div>
+          <small style="font-size:9px;color:var(--text3)">MON</small>
+        </div>
+        <div class="day-slot gym-slot" onclick="openModal('gym-${gymType[0]}', ${w})" data-tooltip="Click for full workout">
+          <span class="day-slot-icon">🏋️</span>
+          <div class="day-slot-label">Gym</div>
+          <small style="font-size:9px;color:var(--text3)">TUE/WED</small>
+        </div>
+        <div class="day-slot gym-slot" onclick="openModal('gym-${gymType[1]}', ${w})" data-tooltip="Click for full workout">
+          <span class="day-slot-icon">💪</span>
+          <div class="day-slot-label">Gym</div>
+          <small style="font-size:9px;color:var(--text3)">THU/FRI</small>
+        </div>
+        <div class="day-slot run-slot" onclick="openModal('run', ${w})" data-tooltip="Click — foot swap available">
+          <span class="day-slot-icon">🏃</span>
+          <div class="day-slot-label">Run</div>
+          <small style="font-size:9px;color:var(--text3)">WEEKEND</small>
+          <div class="foot-flag" title="Foot swap available">🔄</div>
+        </div>
+      </div>
+      <div class="week-motivation">${motiv}</div>
+    `;
+    grid.appendChild(card);
+  }
+}
+
+// ===================================================================
+// MODAL
+// ===================================================================
+
+function openModal(type, week) {
+  const phase = getPhase(week);
+  const runPhase = week <= 4 ? 'foundation' : week <= 9 ? 'building' : week <= 14 ? 'burning' : 'push';
+  const gymPhase = runPhase;
+  const intensity = getIntensity(gymPhase);
+  const busy = BUSY_WEEK_MINS[gymPhase];
+
+  let title = '', subtitle = '', body = '';
+
+  if (type === 'football') {
+    title = '⚽ Football';
+    subtitle = `Week ${week} · ${phase.name} Phase`;
+    body = `
+      <div class="session-section">
+        <div class="session-section-title">Warm-Up</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.5;">${FOOTBALL_SESSION.warmup}</div>
+      </div>
+      <div class="session-section">
+        <div class="session-section-title">Session Tips</div>
+        <ul style="list-style:none;padding:0;">
+          ${FOOTBALL_SESSION.tips.map(t => `<li style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;color:var(--text2);display:flex;gap:8px;"><span style="color:var(--football)">→</span>${t}</li>`).join('')}
+        </ul>
+      </div>
+      <div class="session-section">
+        <div class="session-section-title">Cool-Down</div>
+        <div style="font-size:13px;color:var(--text2);">${FOOTBALL_SESSION.cooldown}</div>
+      </div>
+      <div class="tip-box recovery">
+        <strong>Post-football recovery:</strong> Foam roll quads and hamstrings Monday night. Protein within 30 min. Ice anything tender for 10 min.
+      </div>
+      <div class="busy-week-box">
+        <strong>💼 Busy Week?</strong> Football still happens — it's social accountability. If you're wrecked, drop the gym session this week, not football.
+      </div>
+    `;
+
+  } else if (type.startsWith('gym')) {
+    const gymType = type.includes('upper') ? 'upper' : 'lower';
+    const session = GYM_SESSIONS[gymType];
+    const gymPhaseLabel = week <= 4 ? 'Foundation (light, form focus)' : week <= 9 ? 'Building (moderate weight)' : week <= 14 ? 'Burning (heavier, slower)' : 'Final Push (maximum effort)';
+
+    title = `${session.icon} ${session.label}`;
+    subtitle = `Week ${week} · ${phase.name} · ${intensity.reps} · ${intensity.duration}`;
+    body = `
+      <div style="background:rgba(124,77,255,0.08);border:1px solid rgba(124,77,255,0.2);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--text2);">
+        <strong style="color:var(--gym)">Phase guidance:</strong> ${gymPhaseLabel}. ${intensity.intensity}
+      </div>
+      <div class="session-section">
+        <div class="session-section-title">Warm-Up (5 min)</div>
+        <div style="font-size:13px;color:var(--text2);">${session.warmup}</div>
+      </div>
+      <div class="session-section">
+        <div class="session-section-title">Exercises</div>
+        ${session.exercises.map(ex => `
+          <div class="exercise-row">
+            <div class="exercise-name">${ex.name}<small>${ex.note}</small></div>
+            <div class="exercise-sets" style="color:var(--gym)">${ex.sets} · ${intensity.reps}</div>
+            <div class="exercise-rest">Rest: ${ex.rest}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="session-section">
+        <div class="session-section-title">Cool-Down (5 min)</div>
+        <div style="font-size:13px;color:var(--text2);">${session.cooldown}</div>
+      </div>
+      <div class="tip-box recovery">
+        <strong>Soreness tip:</strong> DOMS peaks ~48 hrs later. On those days: light movement > rest. Protein within 45 min post-session. Contrast shower tonight.
+      </div>
+      <div class="busy-week-box">
+        <strong>💼 Busy Week mode:</strong> ${busy.gym}
+      </div>
+    `;
+
+  } else if (type === 'run') {
+    const runData = RUN_SESSIONS[runPhase];
+    title = `🏃 ${runData.label}`;
+    subtitle = `Week ${week} · ${phase.name} Phase · Weekend`;
+    body = `
+      <div style="background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--text2);">
+        ${runData.desc}
+      </div>
+      <div style="background:rgba(255,215,64,0.1);border:1px solid rgba(255,215,64,0.25);border-radius:8px;padding:12px 14px;margin-bottom:16px;">
+        <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--warn);margin-bottom:6px;">🔄 FOOT ISSUE? SWAP TO:</div>
+        <div style="font-size:13px;color:var(--text2);">${runData.swapDesc}</div>
+      </div>
+      <div class="tip-box recovery">
+        <strong>Route tip:</strong> ${runData.route}
+      </div>
+      <div class="tip-box energy" style="margin-top:10px;">
+        <strong>Fuel:</strong> Eat 60–90 min before. Small, carb-light snack if running first thing. Hydrate 300ml before, 200ml at halfway.
+      </div>
+      <div class="tip-box recovery" style="margin-top:10px;">
+        <strong>Post-run:</strong> Golf ball under foot 2 min each. Calf stretch 2 min each leg. Protein within 30 min.
+      </div>
+      <div class="busy-week-box">
+        <strong>💼 Busy Week mode:</strong> ${busy.run}
+      </div>
+    `;
+  }
+
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalSubtitle').textContent = subtitle;
+  document.getElementById('modalBody').innerHTML = body;
+  document.getElementById('sessionModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('sessionModal').classList.remove('open');
+}
+
+function closeModalOnOverlay(e) {
+  if (e.target === document.getElementById('sessionModal')) closeModal();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ===================================================================
+// NAV
+// ===================================================================
+
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(`panel-${name}`).classList.add('active');
+  event.target.classList.add('active');
+
+  if (name === 'progress') {
+    setTimeout(drawChart, 50);
+    buildMilestones();
+  }
+  if (name === 'motivation') {
+    buildBadges();
+    buildStreakDots();
+    buildPhaseMotivators();
+  }
+}
+
+// ===================================================================
+// WEIGHT CHART
+// ===================================================================
+
+let weightData = {}; // week -> kg
+// Pre-populate week 0
+weightData[0] = 97;
+
+// Build week selector
+function buildWeekSelector() {
+  const sel = document.getElementById('weightWeek');
+  sel.innerHTML = '';
+  for (let w = 0; w <= 17; w++) {
+    const opt = document.createElement('option');
+    opt.value = w;
+    opt.textContent = w === 0 ? 'Week 0 (start)' : `Week ${w}`;
+    sel.appendChild(opt);
+  }
+}
+
+function logWeight() {
+  const week = parseInt(document.getElementById('weightWeek').value);
+  const val = parseFloat(document.getElementById('weightValue').value);
+  if (!val || val < 60 || val > 130) { alert('Please enter a valid weight (60–130kg)'); return; }
+  weightData[week] = val;
+  document.getElementById('weightValue').value = '';
+  saveWeightData();
+  drawChart();
+  updateProgressBar();
+}
+
+function resetWeights() {
+  if (!confirm('Reset all logged weights?')) return;
+  weightData = { 0: 97 };
+  saveWeightData();
+  drawChart();
+  updateProgressBar();
+}
+
+function saveWeightData() {
+  try { localStorage.setItem('johnWeightData', JSON.stringify(weightData)); } catch(e) {}
+}
+
+function loadWeightData() {
+  try {
+    const saved = localStorage.getItem('johnWeightData');
+    if (saved) weightData = JSON.parse(saved);
+  } catch(e) {}
+}
+
+function updateProgressBar() {
+  const weeks = Object.keys(weightData).map(Number).sort((a,b)=>a-b);
+  if (!weeks.length) return;
+  const latest = weightData[weeks[weeks.length - 1]];
+  const pct = Math.max(0, Math.min(100, ((97 - latest) / (97 - 80)) * 100));
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = Math.round(pct) + '%';
+  document.getElementById('currentWeightDisplay').textContent = `Current: ${latest}kg`;
+}
+
+function drawChart() {
+  const svg = document.getElementById('weightChart');
+  if (!svg) return;
+  svg.innerHTML = '';
+
+  const W = 800, H = 260;
+  const padL = 50, padR = 20, padT = 20, padB = 40;
+  const chartW = W - padL - padR;
+  const chartH = H - padT - padB;
+  const weeks = 17;
+  const minKg = 78, maxKg = 98;
+
+  const xScale = w => padL + (w / weeks) * chartW;
+  const yScale = kg => padT + chartH - ((kg - minKg) / (maxKg - minKg)) * chartH;
+
+  // Grid lines
+  const ns = 'http://www.w3.org/2000/svg';
+  [80, 82, 84, 86, 88, 90, 92, 94, 96, 98].forEach(kg => {
+    const y = yScale(kg);
+    const line = document.createElementNS(ns, 'line');
+    line.setAttribute('x1', padL); line.setAttribute('x2', W - padR);
+    line.setAttribute('y1', y); line.setAttribute('y2', y);
+    line.setAttribute('stroke', kg === 80 ? '#00e676' : '#2a3550');
+    line.setAttribute('stroke-width', kg === 80 ? '1.5' : '1');
+    line.setAttribute('stroke-dasharray', kg === 80 ? '4,4' : '2,4');
+    svg.appendChild(line);
+    const txt = document.createElementNS(ns, 'text');
+    txt.setAttribute('x', padL - 8); txt.setAttribute('y', y + 4);
+    txt.setAttribute('fill', kg === 80 ? '#00e676' : '#5a6a88');
+    txt.setAttribute('font-size', '10');
+    txt.setAttribute('text-anchor', 'end');
+    txt.setAttribute('font-family', 'Space Mono');
+    txt.textContent = kg;
+    svg.appendChild(txt);
+  });
+
+  // Phase backgrounds
+  const phaseColors = { foundation: '0,188,212', building: '124,77,255', burning: '255,109,0', push: '255,82,82' };
+  PHASES.forEach(ph => {
+    const x1 = xScale(ph.weeks[0] - 1);
+    const x2 = xScale(ph.weeks[ph.weeks.length - 1]);
+    const rect = document.createElementNS(ns, 'rect');
+    rect.setAttribute('x', x1); rect.setAttribute('y', padT);
+    rect.setAttribute('width', x2 - x1); rect.setAttribute('height', chartH);
+    rect.setAttribute('fill', `rgba(${phaseColors[ph.cls]}, 0.04)`);
+    svg.appendChild(rect);
+    const lbl = document.createElementNS(ns, 'text');
+    lbl.setAttribute('x', (x1 + x2) / 2); lbl.setAttribute('y', padT + 12);
+    lbl.setAttribute('fill', `rgba(${phaseColors[ph.cls]}, 0.5)`);
+    lbl.setAttribute('font-size', '9'); lbl.setAttribute('text-anchor', 'middle');
+    lbl.setAttribute('font-family', 'Barlow Condensed'); lbl.setAttribute('font-weight', '700');
+    lbl.setAttribute('letter-spacing', '1');
+    lbl.textContent = ph.name.toUpperCase();
+    svg.appendChild(lbl);
+  });
+
+  // Target line (interpolate from 97 to 80 over 17 weeks)
+  let targetPath = `M ${xScale(0)} ${yScale(97)}`;
+  for (let w = 1; w <= weeks; w++) {
+    const kg = 97 - (17 / 17) * w;
+    targetPath += ` L ${xScale(w)} ${yScale(kg)}`;
+  }
+  const targetEl = document.createElementNS(ns, 'path');
+  targetEl.setAttribute('d', targetPath);
+  targetEl.setAttribute('stroke', '#37474f');
+  targetEl.setAttribute('stroke-width', '1.5');
+  targetEl.setAttribute('stroke-dasharray', '6,4');
+  targetEl.setAttribute('fill', 'none');
+  svg.appendChild(targetEl);
+
+  // Actual weight line
+  const loggedWeeks = Object.keys(weightData).map(Number).sort((a,b)=>a-b);
+  if (loggedWeeks.length > 1) {
+    let actualPath = '';
+    loggedWeeks.forEach((w, i) => {
+      const kg = weightData[w];
+      const x = xScale(w), y = yScale(kg);
+      actualPath += i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`;
+    });
+    const actualEl = document.createElementNS(ns, 'path');
+    actualEl.setAttribute('d', actualPath);
+    actualEl.setAttribute('stroke', '#ff6d00');
+    actualEl.setAttribute('stroke-width', '2.5');
+    actualEl.setAttribute('fill', 'none');
+    actualEl.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(actualEl);
+  }
+
+  // Dots for logged weeks
+  loggedWeeks.forEach(w => {
+    const kg = weightData[w];
+    const circle = document.createElementNS(ns, 'circle');
+    circle.setAttribute('cx', xScale(w)); circle.setAttribute('cy', yScale(kg));
+    circle.setAttribute('r', '5');
+    circle.setAttribute('fill', '#ff6d00');
+    circle.setAttribute('stroke', '#0a0c10'); circle.setAttribute('stroke-width', '2');
+    const title = document.createElementNS(ns, 'title');
+    title.textContent = `Week ${w}: ${kg}kg`;
+    circle.appendChild(title);
+    svg.appendChild(circle);
+    const txt = document.createElementNS(ns, 'text');
+    txt.setAttribute('x', xScale(w)); txt.setAttribute('y', yScale(kg) - 9);
+    txt.setAttribute('fill', '#ff9e40'); txt.setAttribute('font-size', '10');
+    txt.setAttribute('text-anchor', 'middle'); txt.setAttribute('font-family', 'Space Mono');
+    txt.textContent = kg + 'kg';
+    svg.appendChild(txt);
+  });
+
+  // Week X axis labels
+  [0, 4, 8, 12, 17].forEach(w => {
+    const txt = document.createElementNS(ns, 'text');
+    txt.setAttribute('x', xScale(w)); txt.setAttribute('y', H - 8);
+    txt.setAttribute('fill', '#5a6a88'); txt.setAttribute('font-size', '10');
+    txt.setAttribute('text-anchor', 'middle'); txt.setAttribute('font-family', 'Space Mono');
+    txt.textContent = w === 0 ? 'Start' : `Wk ${w}`;
+    svg.appendChild(txt);
+  });
+
+  // 80kg label
+  const goalTxt = document.createElementNS(ns, 'text');
+  goalTxt.setAttribute('x', W - padR); goalTxt.setAttribute('y', yScale(80) - 4);
+  goalTxt.setAttribute('fill', '#00e676'); goalTxt.setAttribute('font-size', '11');
+  goalTxt.setAttribute('text-anchor', 'end'); goalTxt.setAttribute('font-family', 'Barlow Condensed');
+  goalTxt.setAttribute('font-weight', '700');
+  goalTxt.textContent = '🎯 80kg Goal';
+  svg.appendChild(goalTxt);
+
+  updateProgressBar();
+}
+
+// ===================================================================
+// MILESTONES
+// ===================================================================
+
+const MILESTONES = [
+  { week: 2, kg: 95.8, title: 'First 1kg', desc: 'The body is responding. Keep going.', icon: '🌱' },
+  { week: 4, kg: 94, title: 'Foundation Complete', desc: '-3kg. Habits are forming. You\'re different already.', icon: '🏗️' },
+  { week: 6, kg: 92.5, title: 'Energy Rising', desc: 'Football feels better. Stairs are easier. The kids notice.', icon: '⚡' },
+  { week: 9, kg: 90, title: 'Building Phase Done', desc: '-7kg. You\'ve lost a small dog. Seriously impressive.', icon: '💪' },
+  { week: 12, kg: 87, title: '3 Months In', desc: '-10kg. Shirts fit differently. Sleep is deeper.', icon: '🌙' },
+  { week: 14, kg: 84, title: 'Burning Phase Complete', desc: '-13kg. Almost there. The finish line is visible.', icon: '🔥' },
+  { week: 17, kg: 80, title: '🎯 TARGET HIT', desc: '80kg. 120 days. You told your kids you\'d do this — and you did.', icon: '🏆' },
+];
+
+function buildMilestones() {
+  const grid = document.getElementById('milestonesGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  MILESTONES.forEach(m => {
+    const latestKg = getLatestWeight();
+    const reached = latestKg <= m.kg || (weightData[m.week] && weightData[m.week] <= m.kg);
+    const card = document.createElement('div');
+    card.className = 'motivation-card';
+    card.style.borderColor = reached ? 'var(--accent)' : 'var(--border)';
+    if (reached) card.style.background = 'rgba(255,109,0,0.06)';
+    card.innerHTML = `
+      <div class="motivation-icon">${reached ? m.icon : '🔒'}</div>
+      <div class="motivation-title" style="color:${reached ? 'var(--accent)' : 'var(--text3)'}">${m.title}</div>
+      <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:6px;">Week ${m.week} · ${m.kg}kg</div>
+      <div class="motivation-text">${reached ? m.desc : 'Keep going — you\'ll unlock this.'}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function getLatestWeight() {
+  const weeks = Object.keys(weightData).map(Number).sort((a,b)=>b-a);
+  return weeks.length ? weightData[weeks[0]] : 97;
+}
+
+// ===================================================================
+// BADGES & STREAK
+// ===================================================================
+
+const BADGES = [
+  { icon: '🌱', name: 'First Session', desc: 'Completed session 1', id: 'first' },
+  { icon: '🔥', name: '7-Day Streak', desc: '7 consecutive active days', id: 'streak7' },
+  { icon: '🏗️', name: 'Foundation', desc: 'Completed Weeks 1–4', id: 'foundation' },
+  { icon: '⚡', name: 'Power Week', desc: 'All 4 sessions in one week', id: 'powerweek' },
+  { icon: '💜', name: 'Builder', desc: 'Completed Weeks 5–9', id: 'building' },
+  { icon: '🔥', name: 'Burner', desc: 'Completed Weeks 10–14', id: 'burning' },
+  { icon: '🏆', name: 'Mission Done', desc: 'Completed all 120 days', id: 'mission' },
+  { icon: '⚽', name: 'Football 10', desc: '10 football sessions done', id: 'football10' },
+  { icon: '💪', name: 'Gym 20', desc: '20 gym sessions completed', id: 'gym20' },
+  { icon: '🦶', name: 'Resilient', desc: 'Swapped run 3x and kept going', id: 'resilient' },
+];
+
+let earnedBadges = new Set();
+let streak = 0;
+let streakDots = [];
+
+function loadBadgeData() {
+  try {
+    const s = localStorage.getItem('johnBadges');
+    if (s) earnedBadges = new Set(JSON.parse(s));
+    const sd = localStorage.getItem('johnStreak');
+    if (sd) {
+      const d = JSON.parse(sd);
+      streak = d.streak || 0;
+      streakDots = d.dots || [];
+    }
+  } catch(e) {}
+}
+
+function buildBadges() {
+  const grid = document.getElementById('badgesGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  BADGES.forEach(b => {
+    const div = document.createElement('div');
+    const earned = earnedBadges.has(b.id);
+    div.className = `badge ${earned ? 'earned' : 'locked'}`;
+    div.title = b.desc;
+    div.innerHTML = `<div class="badge-icon">${b.icon}</div><div class="badge-name">${b.name}</div>`;
+    div.onclick = () => toggleBadge(b.id);
+    grid.appendChild(div);
+  });
+}
+
+function toggleBadge(id) {
+  if (earnedBadges.has(id)) earnedBadges.delete(id);
+  else earnedBadges.add(id);
+  try { localStorage.setItem('johnBadges', JSON.stringify([...earnedBadges])); } catch(e) {}
+  buildBadges();
+}
+
+function buildStreakDots() {
+  const container = document.getElementById('streakDots');
+  const numEl = document.getElementById('streakNum');
+  if (!container || !numEl) return;
+
+  // Ensure we have 28 dots
+  while (streakDots.length < 28) streakDots.push(false);
+
+  container.innerHTML = '';
+  streakDots.slice(0, 28).forEach((done, i) => {
+    const dot = document.createElement('div');
+    const isToday = (i === streakDots.filter(Boolean).length) && !done;
+    dot.className = `streak-dot ${done ? 'done' : ''} ${isToday ? 'today' : ''}`;
+    dot.title = done ? `Session ${i+1} ✓` : `Session ${i+1}`;
+    dot.onclick = () => toggleStreakDot(i);
+    container.appendChild(dot);
+  });
+
+  const cnt = streakDots.filter(Boolean).length;
+  numEl.textContent = cnt;
+  document.getElementById('streakNum').textContent = cnt;
+}
+
+function toggleStreakDot(i) {
+  streakDots[i] = !streakDots[i];
+  try { localStorage.setItem('johnStreak', JSON.stringify({ streak, dots: streakDots })); } catch(e) {}
+  buildStreakDots();
+}
+
+function buildPhaseMotivators() {
+  const el = document.getElementById('phaseMotivators');
+  if (!el) return;
+  el.innerHTML = `
+    <div class="recovery-grid">
+      <div class="recovery-card" style="border-top:2px solid var(--foundation)">
+        <div class="recovery-card-header">
+          <div class="recovery-card-icon">🌱</div>
+          <div class="recovery-card-title" style="color:var(--foundation)">Foundation — Weeks 1–4</div>
+        </div>
+        <ul class="recovery-list">
+          <li>Focus: build the habit, not the body — yet. Show up even when unmotivated.</li>
+          <li>Form matters more than weight on the machines right now.</li>
+          <li>Your body is confused and adapting. DOMS is actually a good sign.</li>
+          <li>By Week 3 you\'ll sleep better. By Week 4 you\'ll want to go to the gym.</li>
+          <li>Measure success in sessions completed, not kilos lost.</li>
+        </ul>
+      </div>
+      <div class="recovery-card" style="border-top:2px solid var(--building)">
+        <div class="recovery-card-header">
+          <div class="recovery-card-icon">🏗️</div>
+          <div class="recovery-card-title" style="color:var(--building)">Building — Weeks 5–9</div>
+        </div>
+        <ul class="recovery-list">
+          <li>This is where the transformation becomes visible — in energy first, then the mirror.</li>
+          <li>Increase weights gradually — if 15 reps is easy, add 5% more.</li>
+          <li>Leo and Eli will be able to tell. Kids notice everything.</li>
+          <li>Football on Mondays will start to feel different — more power, more recovery.</li>
+          <li>Don\'t get complacent — the building phase requires more, not less.</li>
+        </ul>
+      </div>
+      <div class="recovery-card" style="border-top:2px solid var(--burning)">
+        <div class="recovery-card-header">
+          <div class="recovery-card-icon">🔥</div>
+          <div class="recovery-card-title" style="color:var(--burning)">Burning — Weeks 10–14</div>
+        </div>
+        <ul class="recovery-list">
+          <li>Fat loss accelerates here — you have the muscle base to burn it properly now.</li>
+          <li>This is mentally the hardest phase. The body wants to plateau. Push anyway.</li>
+          <li>Nutrition matters more now — protein target non-negotiable.</li>
+          <li>80kg is in your peripheral vision. Use that.</li>
+          <li>Cut alcohol if stalling — this phase is too important to waste.</li>
+        </ul>
+      </div>
+      <div class="recovery-card" style="border-top:2px solid var(--push)">
+        <div class="recovery-card-header">
+          <div class="recovery-card-icon">🏆</div>
+          <div class="recovery-card-title" style="color:var(--push)">Final Push — Weeks 15–17</div>
+        </div>
+        <ul class="recovery-list">
+          <li>120 days of commitment ends here. Don\'t coast — finish strong.</li>
+          <li>Up intensity on every session — you have the fitness for it now.</li>
+          <li>Think about what you told yourself you\'d do at the start.</li>
+          <li>Your kids are watching you finish what you started. That\'s the real win.</li>
+          <li>Plan your Day 120 celebration. You\'ve earned it.</li>
+        </ul>
+      </div>
+    </div>
+  `;
+}
+
+// ===================================================================
+// INIT
+// ===================================================================
+
+loadWeightData();
+loadBadgeData();
+buildWeeks();
+buildWeekSelector();
+
+// Build week selector for progress
+for (let w = 0; w <= 17; w++) {
+  const opt = document.createElement('option');
+  opt.value = w;
+  opt.textContent = w === 0 ? 'Week 0 (start)' : `Week ${w}`;
+  document.getElementById('weightWeek').appendChild(opt);
+}
+</script>
+</body>
+</html>
